@@ -1,58 +1,60 @@
-# Amazon 注文履歴 Kindle非表示
+# Hide Kindle Orders
 
-Amazon.co.jp の注文履歴ページで、「Kindle版」の表記を含む注文カードを非表示にする Firefox 拡張機能です。
+A Firefox extension that hides order cards containing "Kindle版" on the Amazon.co.jp order history page.
 
-## 読み込み方（一時的な読み込み）
+## Temporary install
 
-1. Firefox で `about:debugging#/runtime/this-firefox` を開く
-2. 「一時的なアドオンを読み込む」をクリック
-3. このディレクトリの `manifest.json` を選択
-4. [注文履歴](https://www.amazon.co.jp/gp/css/order-history)を開く
+1. Open `about:debugging#/runtime/this-firefox` in Firefox
+2. Click "Load Temporary Add-on"
+3. Pick `manifest.json` from this directory
+4. Open the [order history](https://www.amazon.co.jp/gp/css/order-history)
 
-一時的な読み込みは Firefox を再起動すると消えます。
+A temporary add-on is dropped when Firefox restarts.
 
-## 常用する（署名済み xpi）
+## Permanent install (signed xpi)
 
-通常版の Firefox は署名のない拡張を恒久インストールできません。自分専用の署名は AMO で無料で取得できます。
+Release Firefox will not permanently install an unsigned extension. A self-distributed signature is free on AMO.
 
-1. [AMO の API キー発行ページ](https://addons.mozilla.org/ja/developers/addon/api/key/)で JWT issuer と secret を取得する。生成直後はメールの確認リンクを踏むまで有効にならない
-2. `manifest.json` の `version` を上げる。AMO は同じバージョンを二度受け付けない
-3. 以下を実行する
+1. Get a JWT issuer and secret on the [AMO API key page](https://addons.mozilla.org/en-US/developers/addon/api/key/). A freshly generated key stays inactive until you follow the confirmation link sent by email
+2. Bump `version` in `manifest.json`. AMO rejects a version it has already seen
+3. Run:
 
    ```sh
    AMO_JWT_ISSUER='user:...' AMO_JWT_SECRET='...' node scripts/release.mjs
    ```
 
-4. `web-ext-artifacts/` に出力された xpi を `about:addons` の歯車から「ファイルからアドオンをインストール」で入れる
+4. Install the xpi from `web-ext-artifacts/` through the gear menu in `about:addons` → "Install Add-on From File"
 
-ストアには公開せず、自分用の署名だけを受け取る unlisted チャンネルを使います。審査は自動チェックのみです。
+This uses the unlisted channel, so the add-on is signed for personal use and never published to the store. Review is automated only.
 
-`npx web-ext sign` を使わない理由は、同じ鍵でも `Unknown JWT iss (issuer)` を返したり返さなかったりして不安定だからです。同じ鍵で API を直接叩くと安定して通るため、`scripts/release.mjs` はビルド、アップロード、検証待ち、バージョン作成、署名済み xpi の取得までを自前で行います。
+`npx web-ext sign` is deliberately avoided: with the very same credentials it returns `Unknown JWT iss (issuer)` intermittently. Hitting the API directly is reliable, so `scripts/release.mjs` handles the build, upload, validation polling, version creation, and signed-xpi download itself.
 
-パッケージだけ作る場合は `npx web-ext build` で `web-ext-artifacts/` に zip が出ます。
+To build a package without signing, run `npx web-ext build`; the zip lands in `web-ext-artifacts/`.
 
-## トグル
+## Toggle
 
-注文履歴の右下にボタンが出ます。ラベルは現在の状態を表し、「Kindle：非表示」なら隠れている状態、「Kindle：表示」なら出ている状態です。クリックで入れ替わります。色は固定で、普段は薄く表示され、ホバーかキーボードフォーカスで濃くなります。
+A button sits in the bottom right of the order history. Its label reflects the current state: "Kindle: hidden" means the orders are hidden, "Kindle: shown" means they are visible. Clicking flips it. The color is fixed; the button is translucent at rest and becomes opaque on hover or keyboard focus.
 
-状態は `localStorage` に保存するので、開き直しても維持されます。同一オリジンなので、Infy Scroll が iframe で追加したページも同じ状態で読み込まれ、切り替えは `storage` イベントで追随します。
+The state is kept in `localStorage`, so it survives a reload. Being same-origin, pages that Infy Scroll appends inside an iframe load with the same state, and toggling propagates through the `storage` event.
 
-## 仕組み
+## How it works
 
-`content.js` がページ内の「Kindle版」というテキストを探し、そこから親をたどって「注文番号」を1件だけ含む最小の祖先要素を注文カードとみなして `display: none` を当てます。クラス名に依存しないため、Amazon 側の DOM 変更に比較的強い作りです。無限スクロールや遅延描画に備えて MutationObserver で再実行します。
+`content.js` looks for the text "Kindle版" and walks up from there to the smallest ancestor containing exactly one "注文番号" (order number) label, treats that element as the order card, and applies `display: none`. Because it never depends on class names, it holds up reasonably well against Amazon's markup changes. A MutationObserver re-runs the scan for infinite scroll and lazily rendered content.
 
-## Infy Scroll との併用
+Both Japanese strings are Amazon's own on-page wording, so they stay in Japanese.
 
-2ページ目以降にも効くよう、以下の3つを入れています。
+## Working with Infy Scroll
 
-- `all_frames: true`（Infy Scroll の Iframe / AJAX モードでは追加ページが iframe 内に入るため）
-- `GM_AutoPagerizeLoaded` などの AutoPagerize 系イベントの購読
-- 1.5秒ごとの再スキャン（保険）
+Three measures keep it working past page one.
 
-それでも 2 ページ目以降が消えない場合は、Infy Scroll の append モードを Element（AutoPagerize モード）に変えると確実です。
+- `all_frames: true`, since Infy Scroll's Iframe and AJAX modes place appended pages inside an iframe
+- Listening for AutoPagerize-style events such as `GM_AutoPagerizeLoaded`
+- A rescan every 1.5 seconds as a fallback
 
-## 既知の制限
+If later pages still show Kindle orders, switching Infy Scroll's append mode to Element (AutoPagerize mode) makes it certain.
 
-- 件数表示（「390件の注文」）は Amazon 側の値なので変わりません
-- ページングも Amazon 側が決めるため、非表示にした分 1 ページの表示件数が減ります
-- 「Kindle版」が付いた商品を含む注文は、同じ注文に紙の商品があってもカードごと消えます
+## Known limitations
+
+- The order count ("390件の注文") comes from Amazon and does not change
+- Paging is decided by Amazon, so each page shows fewer entries once orders are hidden
+- An order containing a "Kindle版" item disappears entirely, even if the same order also holds a physical item
