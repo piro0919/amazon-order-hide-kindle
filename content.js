@@ -103,7 +103,7 @@ if (window.top === window) {
       color: #fff;
       cursor: pointer;
       font: 12px/1 sans-serif;
-      opacity: 0.4;
+      opacity: 0.65;
       padding: 10px 14px;
       position: fixed;
       right: 20px;
