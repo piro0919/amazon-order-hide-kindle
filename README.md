@@ -31,6 +31,12 @@ This uses the unlisted channel, so the add-on is signed for personal use and nev
 
 To build a package without signing, run `npx web-ext build`; the zip lands in `web-ext-artifacts/`.
 
+## Icons
+
+`icons/icon.svg` is the source. Run `node scripts/build-icons.mjs` to regenerate the PNGs after editing it.
+
+macOS has no SVG rasterizer installed by default that preserves transparency — `qlmanage` composites transparent areas onto white. The artwork is therefore drawn as a full-bleed square, and the script punches the rounded corners out afterwards by rewriting the alpha channel with a supersampled mask. That keeps the corners genuinely transparent without pulling in another dependency.
+
 ## Toggle
 
 A button sits in the bottom right of the order history. Its label reflects the current state: "Kindle: hidden" means the orders are hidden, "Kindle: shown" means they are visible. Clicking flips it. The color is fixed; the button is translucent at rest and becomes opaque on hover or keyboard focus.
