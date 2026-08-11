@@ -1,7 +1,8 @@
-// ビルド → AMO へアップロード → バージョン作成 → 署名済み xpi の取得までを通しで行う。
-// web-ext sign は同じ鍵でも Unknown JWT iss を返すことがあるため、API を直接叩く。
+// Build, upload to AMO, create the version, and fetch the signed xpi in one pass.
+// web-ext sign returns Unknown JWT iss intermittently for the same credentials,
+// so this talks to the API directly.
 //
-// 使い方:
+// Usage:
 //   AMO_JWT_ISSUER=user:... AMO_JWT_SECRET=... node scripts/release.mjs
 
 import { execFileSync } from "node:child_process";
@@ -14,7 +15,7 @@ const ISSUER = process.env.AMO_JWT_ISSUER;
 const SECRET = process.env.AMO_JWT_SECRET;
 
 if (!ISSUER || !SECRET) {
-  console.error("AMO_JWT_ISSUER と AMO_JWT_SECRET を設定してください。");
+  console.error("Set AMO_JWT_ISSUER and AMO_JWT_SECRET.");
   process.exit(1);
 }
 
@@ -26,7 +27,7 @@ const manifest = JSON.parse(
 const GUID = manifest.browser_specific_settings.gecko.id;
 const VERSION = manifest.version;
 
-/** AMO の JWT は有効期間が短いので、リクエストごとに作り直す。 */
+/** AMO tokens are short lived, so a fresh one is minted per request. */
 function token() {
   const encode = (value) =>
     Buffer.from(JSON.stringify(value)).toString("base64url");
@@ -63,10 +64,10 @@ async function poll(label, attempts, interval, check) {
     await sleep(interval);
   }
 
-  throw new Error(`${label} がタイムアウトしました。`);
+  throw new Error(`Timed out waiting for ${label}.`);
 }
 
-// 1. パッケージを作る
+// 1. Build the package
 execFileSync("npx", ["--yes", "web-ext@8", "build", "--overwrite-dest"], {
   cwd: ROOT,
   stdio: "inherit",
@@ -79,9 +80,9 @@ const zip = fs
   .map((name) => path.join(artifacts, name))
   .at(0);
 
-if (!zip) throw new Error(`${VERSION} の zip が見つかりません。`);
+if (!zip) throw new Error(`No zip found for version ${VERSION}.`);
 
-// 2. アップロードして検証を待つ
+// 2. Upload and wait for validation
 const form = new FormData();
 
 form.append("upload", new Blob([fs.readFileSync(zip)]), path.basename(zip));
@@ -91,11 +92,11 @@ const uploaded = await (
   await api("/addons/upload/", { body: form, method: "POST" })
 ).json();
 
-if (!uploaded.uuid) throw new Error(`アップロード失敗: ${JSON.stringify(uploaded)}`);
+if (!uploaded.uuid) throw new Error(`Upload failed: ${JSON.stringify(uploaded)}`);
 
 console.log(`upload: ${uploaded.uuid}`);
 
-const validated = await poll("検証", 40, 5000, async () => {
+const validated = await poll("validation", 40, 5000, async () => {
   const state = await (await api(`/addons/upload/${uploaded.uuid}/`)).json();
 
   return state.processed ? state : null;
@@ -103,10 +104,10 @@ const validated = await poll("検証", 40, 5000, async () => {
 
 if (!validated.valid) {
   console.error(JSON.stringify(validated.validation?.messages ?? validated, null, 2));
-  throw new Error("検証に失敗しました。");
+  throw new Error("Validation failed.");
 }
 
-// 3. バージョンを作る
+// 3. Create the version
 const created = await api(`/addons/addon/${GUID}/versions/`, {
   body: JSON.stringify({ upload: uploaded.uuid }),
   headers: { "Content-Type": "application/json" },
@@ -114,12 +115,12 @@ const created = await api(`/addons/addon/${GUID}/versions/`, {
 });
 const version = await created.json();
 
-if (!created.ok) throw new Error(`バージョン作成失敗: ${JSON.stringify(version)}`);
+if (!created.ok) throw new Error(`Version creation failed: ${JSON.stringify(version)}`);
 
 console.log(`version: ${version.version} (${version.id})`);
 
-// 4. 署名が終わり、拡張子が xpi になるまで待つ
-const url = await poll("署名", 40, 10000, async () => {
+// 4. Wait until signing completes and the file turns into an xpi
+const url = await poll("signing", 40, 10000, async () => {
   const detail = await (
     await api(`/addons/addon/${GUID}/versions/${version.id}/`)
   ).json();
