@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "Amazon 注文履歴 Kindle非表示",
-  "version": "1.0.3",
-  "description": "Amazon.co.jp の注文履歴から「Kindle版」を含む注文を非表示にします。",
+  "name": "Hide Kindle Orders",
+  "version": "1.1.0",
+  "description": "Hides Kindle orders on the Amazon.co.jp order history page.",
   "browser_specific_settings": {
     "gecko": {
       "data_collection_permissions": {
@@ -11,6 +11,11 @@
       "id": "amazon-order-hide-kindle@piro0919",
       "strict_min_version": "115.0"
     }
+  },
+  "icons": {
+    "48": "icons/icon-48.png",
+    "96": "icons/icon-96.png",
+    "128": "icons/icon-128.png"
   },
   "content_scripts": [
     {

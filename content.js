@@ -1,6 +1,8 @@
-// Amazon.co.jp の注文履歴で「Kindle版」を含む注文カードを非表示にする。
-// クラス名の変更に耐えるよう、セレクタではなく「注文番号」を含む最小の祖先要素を
-// 注文カードとみなす。
+// Hides order cards that contain "Kindle版" on the Amazon.co.jp order history.
+// Instead of relying on class names, an order card is taken to be the smallest
+// ancestor that contains exactly one "注文番号" (order number) label, so the
+// extension survives Amazon's markup changes.
+// The two Japanese literals are Amazon's own on-page wording and must stay as is.
 
 const KEYWORD = "Kindle版";
 const CARD_MARKER = /注文番号/g;
@@ -9,13 +11,14 @@ const BUTTON_ATTR = "data-hide-kindle-button";
 const STATE_KEY = "hide-kindle-orders:hidden";
 const MAX_DEPTH = 20;
 
-/** 非表示は属性＋スタイルシートで行い、トグルはシート単位で有効・無効を切り替える。 */
+/** Hiding is done with an attribute plus a stylesheet, so the toggle can simply
+ * enable or disable the whole sheet. */
 const sheet = document.createElement("style");
 
 sheet.textContent = `[${CARD_ATTR}] { display: none !important; }`;
 document.documentElement.appendChild(sheet);
 
-/** KEYWORD を含むテキストノードを列挙する。 */
+/** Collects every text node that contains KEYWORD. */
 function findKeywordNodes() {
   const walker = document.createTreeWalker(
     document.body,
@@ -37,8 +40,9 @@ function findKeywordNodes() {
 }
 
 /**
- * 起点から親をたどり、「注文番号」を含む最小の祖先を返す。
- * 「注文番号」が2件以上含まれる＝カードより大きい範囲なので、その場合は null。
+ * Walks up from the starting node and returns the smallest ancestor holding the
+ * order number label. Two or more matches means we went past a single card, so
+ * nothing is returned in that case.
  */
 function findCard(start) {
   let node = start.parentElement;
@@ -67,9 +71,9 @@ function markKindleOrders() {
   }
 }
 
-// --- トグル ---
+// --- Toggle ---
 
-/** 状態は localStorage に保存する。同一オリジンなので iframe 側とも共有される。 */
+/** State lives in localStorage, which is shared with same-origin iframes. */
 function isHidden() {
   try {
     return localStorage.getItem(STATE_KEY) !== "false";
@@ -87,11 +91,11 @@ function applyState() {
 
   if (!button) return;
 
-  button.textContent = hidden ? "Kindle：非表示" : "Kindle：表示";
+  button.textContent = hidden ? "Kindle: hidden" : "Kindle: shown";
 }
 
 if (window.top === window) {
-  // ボタンの見た目は別シートに置く。カード用シートはトグルで無効化されるため。
+  // The button styles need their own sheet: the card sheet gets disabled on toggle.
   const buttonSheet = document.createElement("style");
 
   buttonSheet.textContent = `
@@ -124,7 +128,7 @@ if (window.top === window) {
     try {
       localStorage.setItem(STATE_KEY, String(!isHidden()));
     } catch {
-      // プライベートウィンドウなどで書けない場合は切り替えが保存されない。
+      // Private windows may refuse writes; the toggle then just isn't persisted.
     }
 
     applyState();
@@ -134,12 +138,12 @@ if (window.top === window) {
 
 applyState();
 
-// 他フレームでの切り替えに追随する。storage は変更元のフレームには飛ばない。
+// Follow toggles made in other frames. The storage event skips its own frame.
 window.addEventListener("storage", (event) => {
   if (event.key === STATE_KEY) applyState();
 });
 
-// --- 起動と再スキャン ---
+// --- Startup and rescanning ---
 
 let scheduled = false;
 
@@ -160,8 +164,9 @@ new MutationObserver(schedule).observe(document.body, {
   subtree: true,
 });
 
-// Infy Scroll / AutoPagerize 系が次ページを追加したときの通知。
-// MutationObserver で拾えるケースと重複するが、二重処理は CARD_ATTR で防いでいる。
+// Notifications from Infy Scroll and other AutoPagerize-style extensions when a
+// next page is appended. This overlaps with the MutationObserver, but CARD_ATTR
+// keeps the work idempotent.
 for (const eventName of [
   "GM_AutoPagerizeLoaded",
   "GM_AutoPagerizeNextPageLoaded",
@@ -171,5 +176,6 @@ for (const eventName of [
   document.addEventListener(eventName, schedule, false);
 }
 
-// 追加ページが Shadow DOM や独自の描画経路で入ってきた場合の保険。
+// Fallback for appended pages that arrive through a shadow root or some other
+// path the observer cannot see.
 setInterval(schedule, 1500);

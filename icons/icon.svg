@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="512" height="512">
+  <rect width="128" height="128" rx="26" fill="#232f3e" />
+  <text
+    x="64"
+    y="64"
+    fill="#ffffff"
+    font-family="Helvetica, Arial, sans-serif"
+    font-size="74"
+    font-weight="bold"
+    text-anchor="middle"
+    dominant-baseline="central"
+  >K</text>
+  <path d="M26 102 L102 26" stroke="#ff9900" stroke-width="13" stroke-linecap="round" />
+</svg>
