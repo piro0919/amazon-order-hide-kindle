@@ -5,6 +5,7 @@
 const KEYWORD = "Kindle版";
 const CARD_MARKER = /注文番号/g;
 const CARD_ATTR = "data-hide-kindle-card";
+const BUTTON_ATTR = "data-hide-kindle-button";
 const STATE_KEY = "hide-kindle-orders:hidden";
 const MAX_DEPTH = 20;
 
@@ -87,24 +88,38 @@ function applyState() {
   if (!button) return;
 
   button.textContent = hidden ? "Kindle：非表示" : "Kindle：表示";
-  button.style.background = hidden ? "#232f3e" : "#767676";
 }
 
 if (window.top === window) {
+  // ボタンの見た目は別シートに置く。カード用シートはトグルで無効化されるため。
+  const buttonSheet = document.createElement("style");
+
+  buttonSheet.textContent = `
+    [${BUTTON_ATTR}] {
+      background: #232f3e;
+      border: none;
+      border-radius: 999px;
+      bottom: 20px;
+      color: #fff;
+      cursor: pointer;
+      font: 12px/1 sans-serif;
+      opacity: 0.4;
+      padding: 10px 14px;
+      position: fixed;
+      right: 20px;
+      transition: opacity 0.15s ease;
+      z-index: 2147483647;
+    }
+    [${BUTTON_ATTR}]:hover,
+    [${BUTTON_ATTR}]:focus-visible {
+      opacity: 1;
+    }
+  `;
+  document.documentElement.appendChild(buttonSheet);
+
   button = document.createElement("button");
   button.type = "button";
-  Object.assign(button.style, {
-    border: "none",
-    borderRadius: "999px",
-    bottom: "20px",
-    color: "#fff",
-    cursor: "pointer",
-    font: "12px/1 sans-serif",
-    padding: "10px 14px",
-    position: "fixed",
-    right: "20px",
-    zIndex: "2147483647",
-  });
+  button.setAttribute(BUTTON_ATTR, "");
   button.addEventListener("click", () => {
     try {
       localStorage.setItem(STATE_KEY, String(!isHidden()));
