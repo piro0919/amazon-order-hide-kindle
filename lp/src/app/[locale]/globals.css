@@ -1,0 +1,131 @@
+@import "tailwindcss";
+
+/* Theme tokens — raw CSS variables so `prefers-color-scheme: dark` can override
+   them below. The palette follows the extension itself: Amazon's navy chrome
+   with the orange accent it uses for highlights. */
+:root {
+  --brand: #232f3e;
+  --brand-hover: #131a22;
+  --accent: #e07b00;
+  --ink-1: #131a22;
+  --ink-2: #565f6b;
+  --ink-3: #8d95a0;
+  --surface: #f4f6f8;
+  --card: #ffffff;
+  --border: rgba(19, 26, 34, 0.1);
+  --hero-from: #f8fafc;
+  --hero-via: #eef2f7;
+  --hero-to: #f4f6f8;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --brand: #4c6484;
+    --brand-hover: #5d7ca6;
+    --accent: #ff9900;
+    --ink-1: #f2f4f7;
+    --ink-2: #a8b0bb;
+    --ink-3: #7d8590;
+    --surface: #0c1119;
+    --card: #161d27;
+    --border: rgba(255, 255, 255, 0.1);
+    --hero-from: #0e141d;
+    --hero-via: #111925;
+    --hero-to: #0c1119;
+  }
+}
+
+/* Tailwind v4 theme — `inline` so utilities embed the var() reference literally,
+   which then resolves against the :root overrides above for dark mode. */
+@theme inline {
+  --color-brand: var(--brand);
+  --color-brand-hover: var(--brand-hover);
+  --color-accent: var(--accent);
+  --color-ink-1: var(--ink-1);
+  --color-ink-2: var(--ink-2);
+  --color-ink-3: var(--ink-3);
+  --color-surface: var(--surface);
+  --color-card: var(--card);
+  --color-border: var(--border);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+body {
+  background: var(--color-surface);
+  color: var(--color-ink-1);
+  font-family: var(--font-sans), -apple-system, BlinkMacSystemFont, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--color-accent) 25%, transparent);
+}
+
+/* Hero ambient background — soft radial accents */
+.hero-bg {
+  background:
+    radial-gradient(
+      60rem 30rem at 18% -10%,
+      color-mix(in srgb, var(--color-brand) 14%, transparent),
+      transparent 60%
+    ),
+    radial-gradient(
+      50rem 30rem at 82% 0%,
+      color-mix(in srgb, var(--color-accent) 14%, transparent),
+      transparent 60%
+    ),
+    linear-gradient(180deg, var(--hero-from) 0%, var(--hero-via) 50%, var(--hero-to) 100%);
+}
+
+/* Order-history mockup window — subtle elevation */
+.mockup-shell {
+  background: var(--color-card);
+  border: 1px solid var(--color-border);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.6) inset,
+    0 30px 60px -20px rgba(0, 0, 0, 0.25),
+    0 10px 30px -10px rgba(0, 0, 0, 0.15);
+}
+
+@media (prefers-color-scheme: dark) {
+  .mockup-shell {
+    box-shadow:
+      0 1px 0 rgba(255, 255, 255, 0.04) inset,
+      0 30px 60px -20px rgba(0, 0, 0, 0.6),
+      0 10px 30px -10px rgba(0, 0, 0, 0.4);
+  }
+}
+
+/* A hidden Kindle row, mid-collapse */
+@keyframes fade-out-row {
+  0%,
+  55% {
+    opacity: 0.4;
+    filter: grayscale(1);
+  }
+  75%,
+  100% {
+    opacity: 0.08;
+    filter: grayscale(1);
+  }
+}
+.row-hiding {
+  animation: fade-out-row 3.2s ease-in-out infinite alternate;
+}
+
+/* Soft fade-in on load */
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.fade-up {
+  animation: fade-up 0.6s ease-out both;
+}

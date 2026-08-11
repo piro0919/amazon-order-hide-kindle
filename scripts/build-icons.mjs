@@ -18,6 +18,15 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const ICONS = path.join(ROOT, "icons");
 const SOURCE = path.join(ICONS, "icon.svg");
 const SIZES = [48, 96, 128];
+// The landing page in lp/ reuses the same artwork for its favicons and OG image.
+const LP_TARGETS = [
+  { name: "favicon-16x16.png", size: 16 },
+  { name: "favicon-32x32.png", size: 32 },
+  { name: "apple-touch-icon.png", size: 180 },
+  { name: "icon-192.png", size: 192 },
+  { name: "icon.png", size: 512 },
+  { name: "icon-512.png", size: 512 },
+];
 const RADIUS_RATIO = 26 / 128; // matches the corner radius the artwork is drawn for
 const SAMPLES = 4; // per-axis supersampling used to antialias the corner edge
 
@@ -178,14 +187,24 @@ function roundCorners(image) {
   return image;
 }
 
-for (const size of SIZES) {
-  const out = path.join(ICONS, `icon-${size}.png`);
-
+function render(size, out) {
   fs.rmSync(out, { force: true });
   execFileSync("qlmanage", ["-t", "-s", String(size), "-o", ICONS, SOURCE], {
     stdio: "ignore",
   });
   fs.renameSync(path.join(ICONS, "icon.svg.png"), out);
   fs.writeFileSync(out, encode(roundCorners(decode(fs.readFileSync(out)))));
-  console.log(`icons/icon-${size}.png`);
+  console.log(path.relative(ROOT, out));
+}
+
+for (const size of SIZES) {
+  render(size, path.join(ICONS, `icon-${size}.png`));
+}
+
+const lpPublic = path.join(ROOT, "lp", "public");
+
+if (fs.existsSync(lpPublic)) {
+  for (const { name, size } of LP_TARGETS) {
+    render(size, path.join(lpPublic, name));
+  }
 }
