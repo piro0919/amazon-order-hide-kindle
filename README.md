@@ -9,7 +9,26 @@ Amazon.co.jp の注文履歴ページで、「Kindle版」の表記を含む注�
 3. このディレクトリの `manifest.json` を選択
 4. [注文履歴](https://www.amazon.co.jp/gp/css/order-history)を開く
 
-一時的な読み込みは Firefox を再起動すると消えます。常用するなら署名済み xpi にするか、Firefox Developer Edition で `xpinstall.signatures.required` を `false` にしてください。
+一時的な読み込みは Firefox を再起動すると消えます。
+
+## 常用する（署名済み xpi）
+
+通常版の Firefox は署名のない拡張を恒久インストールできません。自分専用の署名は AMO で無料で取得できます。
+
+1. [AMO の API キー発行ページ](https://addons.mozilla.org/ja/developers/addon/api/key/)で JWT issuer と secret を取得する
+2. 以下を実行する
+
+   ```sh
+   npx web-ext sign --channel unlisted \
+     --api-key "$AMO_JWT_ISSUER" \
+     --api-secret "$AMO_JWT_SECRET"
+   ```
+
+3. `web-ext-artifacts/` に出力された xpi を `about:addons` の歯車から「ファイルからアドオンをインストール」で入れる
+
+`--channel unlisted` は AMO のストアに公開せず、自分用の署名だけを受け取るモードです。審査は自動チェックのみで通ります。
+
+パッケージだけ作る場合は `npx web-ext build` で `web-ext-artifacts/` に zip が出ます。
 
 ## トグル
 
