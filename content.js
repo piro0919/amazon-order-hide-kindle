@@ -91,7 +91,7 @@ function applyState() {
 
   if (!button) return;
 
-  button.textContent = hidden ? "Kindle: hidden" : "Kindle: shown";
+  button.textContent = hidden ? "Hide Kindle: On" : "Hide Kindle: Off";
 }
 
 if (window.top === window) {
@@ -106,9 +106,10 @@ if (window.top === window) {
       bottom: 20px;
       color: #fff;
       cursor: pointer;
-      font: 12px/1 sans-serif;
+      font: 11px/1 sans-serif;
+      min-width: 96px;
       opacity: 0.65;
-      padding: 10px 14px;
+      padding: 8px 12px;
       position: fixed;
       right: 20px;
       transition: opacity 0.15s ease;
