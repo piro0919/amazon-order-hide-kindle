@@ -39,7 +39,7 @@ macOS has no SVG rasterizer installed by default that preserves transparency —
 
 ## Toggle
 
-A button sits in the bottom right of the order history. Its label reflects the current state: "Kindle: hidden" means the orders are hidden, "Kindle: shown" means they are visible. Clicking flips it. The color is fixed; the button is translucent at rest and becomes opaque on hover or keyboard focus.
+A button sits in the bottom right of the order history. Its label reflects the current state: "Hide Kindle: On" means the orders are hidden, "Hide Kindle: Off" means they are visible. Clicking flips it. The color is fixed; the button is translucent at rest and becomes opaque on hover or keyboard focus.
 
 The state is kept in `localStorage`, so it survives a reload. Being same-origin, pages that Infy Scroll appends inside an iframe load with the same state, and toggling propagates through the `storage` event.
 
