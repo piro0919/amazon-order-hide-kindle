@@ -15,18 +15,19 @@ Amazon.co.jp の注文履歴ページで、「Kindle版」の表記を含む注�
 
 通常版の Firefox は署名のない拡張を恒久インストールできません。自分専用の署名は AMO で無料で取得できます。
 
-1. [AMO の API キー発行ページ](https://addons.mozilla.org/ja/developers/addon/api/key/)で JWT issuer と secret を取得する
-2. 以下を実行する
+1. [AMO の API キー発行ページ](https://addons.mozilla.org/ja/developers/addon/api/key/)で JWT issuer と secret を取得する。生成直後はメールの確認リンクを踏むまで有効にならない
+2. `manifest.json` の `version` を上げる。AMO は同じバージョンを二度受け付けない
+3. 以下を実行する
 
    ```sh
-   npx web-ext sign --channel unlisted \
-     --api-key "$AMO_JWT_ISSUER" \
-     --api-secret "$AMO_JWT_SECRET"
+   AMO_JWT_ISSUER='user:...' AMO_JWT_SECRET='...' node scripts/release.mjs
    ```
 
-3. `web-ext-artifacts/` に出力された xpi を `about:addons` の歯車から「ファイルからアドオンをインストール」で入れる
+4. `web-ext-artifacts/` に出力された xpi を `about:addons` の歯車から「ファイルからアドオンをインストール」で入れる
 
-`--channel unlisted` は AMO のストアに公開せず、自分用の署名だけを受け取るモードです。審査は自動チェックのみで通ります。
+ストアには公開せず、自分用の署名だけを受け取る unlisted チャンネルを使います。審査は自動チェックのみです。
+
+`npx web-ext sign` を使わない理由は、同じ鍵でも `Unknown JWT iss (issuer)` を返したり返さなかったりして不安定だからです。同じ鍵で API を直接叩くと安定して通るため、`scripts/release.mjs` はビルド、アップロード、検証待ち、バージョン作成、署名済み xpi の取得までを自前で行います。
 
 パッケージだけ作る場合は `npx web-ext build` で `web-ext-artifacts/` に zip が出ます。
 
