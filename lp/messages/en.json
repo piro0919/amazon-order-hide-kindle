@@ -22,22 +22,5 @@
     "hidden1Date": "Aug 11",
     "hidden2": "美人女上司滝沢さん 10",
     "hidden2Date": "Aug 8"
-  },
-  "Points": {
-    "toggle": {
-      "title": "One-click toggle",
-      "description": "A button in the bottom right flips hiding on and off. The choice is remembered."
-    },
-    "infiniteScroll": {
-      "title": "Infinite scroll ready",
-      "description": "Pages appended by Infy Scroll and friends are filtered too."
-    },
-    "privacy": {
-      "title": "No data collection",
-      "description": "Everything happens on the page. Nothing is sent anywhere."
-    }
-  },
-  "Footer": {
-    "madeBy": "Made by"
   }
 }

@@ -22,22 +22,5 @@
     "hidden1Date": "8月11日",
     "hidden2": "美人女上司滝沢さん 10",
     "hidden2Date": "8月8日"
-  },
-  "Points": {
-    "toggle": {
-      "title": "ワンクリックで切り替え",
-      "description": "右下のボタンで非表示と表示を行き来します。状態は保存されます。"
-    },
-    "infiniteScroll": {
-      "title": "無限スクロール対応",
-      "description": "Infy Scroll などが追加した2ページ目以降にも効きます。"
-    },
-    "privacy": {
-      "title": "データ収集なし",
-      "description": "注文履歴のページ内で完結します。送信も解析もありません。"
-    }
-  },
-  "Footer": {
-    "madeBy": "作った人"
   }
 }
