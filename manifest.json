@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Amazon 注文履歴 Kindle非表示",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Amazon.co.jp の注文履歴から「Kindle版」を含む注文を非表示にします。",
   "browser_specific_settings": {
     "gecko": {
