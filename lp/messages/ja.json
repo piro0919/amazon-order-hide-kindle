@@ -1,0 +1,83 @@
+{
+  "Metadata": {
+    "title": "Hide Kindle Orders",
+    "description": "Amazon.co.jp の注文履歴から Kindle の注文を隠す Firefox 拡張機能。"
+  },
+  "Hero": {
+    "badge": "Firefox 拡張機能",
+    "tagline": "注文履歴から、Kindle の波を引く。",
+    "description": "週に何冊かコミックを買うだけで、Amazon.co.jp の注文履歴は Kindle で埋まります。この拡張はそれをワンクリックで隠し、実際に届いた物の注文をすぐ見つけられるようにします。",
+    "download": "署名済み xpi をダウンロード",
+    "viewOnGithub": "GitHub で見る",
+    "freeNote": "無料 · オープンソース · MIT ライセンス",
+    "mockup": {
+      "heading": "注文履歴",
+      "count": "2026年に確定された390件の注文",
+      "toggle": "Hide Kindle: On",
+      "orderLabel": "注文日",
+      "kindleLabel": "Kindle版",
+      "kept1": "メカニカルキーボード 65%配列",
+      "kept1Date": "8月10日",
+      "kept2": "コーヒー豆 500g",
+      "kept2Date": "8月9日",
+      "hidden1": "異世界辺境メシ（6）",
+      "hidden1Date": "8月11日",
+      "hidden2": "美人女上司滝沢さん 10",
+      "hidden2Date": "8月8日"
+    }
+  },
+  "Why": {
+    "eyebrow": "作った理由",
+    "title": "Amazon 側に、除外する手段がない。",
+    "description": "注文履歴は年やキーワードで絞れますし、デジタルの注文だけを表示することもできます。しかし除外はできません。Kindle をよく読む人ほど、配送状況や領収書を確認したい物理の注文が、電子書籍の山に埋もれます。この拡張は、Amazon が用意していない「Kindle を外す」という一点だけを担います。"
+  },
+  "Companions": {
+    "title": "併用できるもの",
+    "description": "無限スクロール系の拡張が追加したページも走査します。iframe の中に差し込む方式にも対応しています。"
+  },
+  "Features": {
+    "title": "特徴",
+    "toggle": {
+      "title": "ワンクリックの切り替え",
+      "description": "右下の小さなボタンで、非表示と表示を行き来します。普段は半透明で、閲覧の邪魔をしません。"
+    },
+    "resilient": {
+      "title": "壊れにくい判定",
+      "description": "注文カードはクラス名ではなく「注文番号」の表記から特定します。Amazon 側の頻繁なマークアップ変更で壊れません。"
+    },
+    "infiniteScroll": {
+      "title": "無限スクロール対応",
+      "description": "DOM の変化、AutoPagerize 系のイベント、タイマーの三方向で再走査するので、2ページ目以降にも効きます。"
+    },
+    "remembers": {
+      "title": "状態を覚える",
+      "description": "オンとオフの状態はローカルに保存され、注文履歴を開き直しても復元されます。iframe 側にも共有されます。"
+    },
+    "privacy": {
+      "title": "ページの外へ出さない",
+      "description": "アカウントもサーバーも解析もありません。データ収集なしを宣言し、Amazon.co.jp の注文履歴でのみ動きます。"
+    },
+    "signed": {
+      "title": "Mozilla の署名付き",
+      "description": "AMO の unlisted チャンネルで署名した xpi を配布しています。通常版の Firefox にそのまま入ります。"
+    }
+  },
+  "Install": {
+    "title": "インストール",
+    "step1": "GitHub の最新リリースから xpi をダウンロードします。",
+    "step2": "Firefox で about:addons を開き、歯車メニューから「ファイルからアドオンをインストール」を選びます。",
+    "step3": "Amazon.co.jp の注文履歴を開きます。Kindle の注文はすぐに消えます。",
+    "note": "署名済みなので、開発者向けの設定や未署名拡張の回避策は必要ありません。"
+  },
+  "CTA": {
+    "title": "履歴を読める状態に。",
+    "description": "ファイル1つ、クリック1回で、注文履歴がまた読めるようになります。",
+    "download": "最新リリースをダウンロード",
+    "requirement": "Firefox 115 以降 · amazon.co.jp のみ"
+  },
+  "Footer": {
+    "madeBy": "作った人",
+    "openSource": "GitHub で公開中",
+    "buyMeACoffee": "Buy Me a Coffee"
+  }
+}

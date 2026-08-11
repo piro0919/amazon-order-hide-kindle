@@ -1,0 +1,83 @@
+{
+  "Metadata": {
+    "title": "Hide Kindle Orders",
+    "description": "A Firefox extension that hides Kindle orders on the Amazon.co.jp order history page."
+  },
+  "Hero": {
+    "badge": "Firefox Extension",
+    "tagline": "Your order history, minus the Kindle flood.",
+    "description": "Buy a few comics a week and your Amazon.co.jp order history turns into a wall of Kindle purchases. This extension hides them with one click, so the things you actually shipped are easy to find again.",
+    "download": "Download the signed xpi",
+    "viewOnGithub": "View on GitHub",
+    "freeNote": "Free · Open source · MIT licensed",
+    "mockup": {
+      "heading": "Order history",
+      "count": "390 orders in 2026",
+      "toggle": "Hide Kindle: On",
+      "orderLabel": "Ordered",
+      "kindleLabel": "Kindle版",
+      "kept1": "Mechanical keyboard, 65% layout",
+      "kept1Date": "Aug 10",
+      "kept2": "Coffee beans, 500g",
+      "kept2Date": "Aug 9",
+      "hidden1": "異世界辺境メシ（6）",
+      "hidden1Date": "Aug 11",
+      "hidden2": "美人女上司滝沢さん 10",
+      "hidden2Date": "Aug 8"
+    }
+  },
+  "Why": {
+    "eyebrow": "Why it exists",
+    "title": "Amazon gives you no way to filter these out.",
+    "description": "The order history can be narrowed by year or by keyword, and digital orders can be shown on their own — but there is no way to exclude them. If you read a lot on Kindle, every physical order you want to check a delivery date or a receipt for is buried under a dozen ebook purchases. This extension does the one thing Amazon does not offer: leave the Kindle orders out."
+  },
+  "Companions": {
+    "title": "Plays well with",
+    "description": "Pages appended by infinite-scroll extensions are scanned too, including the ones that inject them inside an iframe."
+  },
+  "Features": {
+    "title": "Features",
+    "toggle": {
+      "title": "One-click toggle",
+      "description": "A small button in the bottom right flips between hiding and showing. Translucent at rest so it stays out of the way."
+    },
+    "resilient": {
+      "title": "No brittle selectors",
+      "description": "Order cards are found by their order-number label rather than by class names, so Amazon's frequent markup changes do not break it."
+    },
+    "infiniteScroll": {
+      "title": "Infinite scroll ready",
+      "description": "Re-scans on DOM changes, on AutoPagerize-style events, and on a timer, so page two onwards is filtered as well."
+    },
+    "remembers": {
+      "title": "Remembers your choice",
+      "description": "The on-off state is stored locally and restored when you open the order history again, iframes included."
+    },
+    "privacy": {
+      "title": "Nothing leaves the page",
+      "description": "No accounts, no servers, no analytics. It declares no data collection and runs only on Amazon.co.jp order history URLs."
+    },
+    "signed": {
+      "title": "Signed by Mozilla",
+      "description": "Distributed as a signed xpi through AMO's unlisted channel, so release Firefox installs it permanently."
+    }
+  },
+  "Install": {
+    "title": "Install",
+    "step1": "Download the xpi from the latest GitHub release.",
+    "step2": "Open about:addons in Firefox, then pick \"Install Add-on From File\" from the gear menu.",
+    "step3": "Open your Amazon.co.jp order history. Kindle orders are hidden right away.",
+    "note": "It is signed, so no developer settings or unsigned-extension workarounds are needed."
+  },
+  "CTA": {
+    "title": "Clear the clutter.",
+    "description": "One file, one click, and your order history is readable again.",
+    "download": "Download the latest release",
+    "requirement": "Firefox 115 or later · amazon.co.jp only"
+  },
+  "Footer": {
+    "madeBy": "Made by",
+    "openSource": "Open Source on GitHub",
+    "buyMeACoffee": "Buy Me a Coffee"
+  }
+}

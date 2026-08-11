@@ -1,0 +1,9 @@
+# *
+User-agent: *
+Allow: /
+
+# Host
+Host: https://hide-kindle-orders.kkweb.io
+
+# Sitemaps
+Sitemap: https://hide-kindle-orders.kkweb.io/sitemap.xml
