@@ -1,13 +1,21 @@
 import { Download, Github } from "lucide-react";
 import Image from "next/image";
-import { useTranslations } from "next-intl";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { ReactNode } from "react";
 
 const GITHUB_URL = "https://github.com/piro0919/amazon-order-hide-kindle";
 const RELEASE_URL = "https://github.com/piro0919/amazon-order-hide-kindle/releases/latest";
 
-export default function Page(): ReactNode {
-  const t = useTranslations();
+type PageProps = {
+  params: Promise<{ locale: string }>;
+};
+
+export default async function Page({ params }: PageProps): Promise<ReactNode> {
+  const { locale } = await params;
+
+  setRequestLocale(locale);
+
+  const t = await getTranslations();
 
   return (
     <main className="hero-bg flex min-h-dvh items-center px-6 py-16">
