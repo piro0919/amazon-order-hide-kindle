@@ -1,6 +1,6 @@
 import { Analytics } from "@vercel/analytics/next";
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, BIZ_UDPGothic } from "next/font/google";
 import { notFound } from "next/navigation";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
@@ -16,6 +16,17 @@ const geistSans = Geist({
 const geistMono = Geist_Mono({
   subsets: ["latin"],
   variable: "--font-geist-mono",
+});
+
+/* 見出しの書体。帳票に使われる UD ゴシックを当てて、注文履歴の話と揃える。
+   日本語は unicode-range で百件以上に割れるので preload は切る。
+   切らないと使わない範囲まで先読みして 1ページで 1.5MB 取りに行く */
+const displayFont = BIZ_UDPGothic({
+  display: "swap",
+  preload: false,
+  subsets: ["latin"],
+  variable: "--font-display",
+  weight: ["400", "700"],
 });
 
 export function generateStaticParams(): { locale: string }[] {
@@ -91,7 +102,7 @@ export default async function RootLayout({
 
   return (
     <html lang={locale} suppressHydrationWarning={true}>
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+      <body className={`${geistSans.variable} ${geistMono.variable} ${displayFont.variable} antialiased`}>
         <NextIntlClientProvider>{children}</NextIntlClientProvider>
         <Analytics />
       </body>

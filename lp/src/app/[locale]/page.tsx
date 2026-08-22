@@ -50,7 +50,7 @@ export default async function Page({ params }: PageProps): Promise<ReactNode> {
           <p className="font-mono text-xs tracking-[0.25em] text-lime uppercase">
             Firefox Extension
           </p>
-          <h1 className="mt-6 text-4xl leading-[1.15] font-bold tracking-tight whitespace-pre-line text-on-field sm:text-5xl">
+          <h1 className="mt-6 font-display text-4xl leading-[1.15] font-bold tracking-tight whitespace-pre-line text-on-field sm:text-5xl">
             {t("Hero.title")}
           </h1>
           <p className="mt-6 max-w-md leading-relaxed text-on-field-dim">
@@ -121,7 +121,7 @@ export default async function Page({ params }: PageProps): Promise<ReactNode> {
               <span className="font-mono text-xs text-lime">
                 {String(i + 1).padStart(2, "0")}
               </span>
-              <h2 className="mt-4 text-lg font-semibold text-on-field">
+              <h2 className="mt-4 font-display text-lg font-semibold text-on-field">
                 {t(`Points.${key}.title`)}
               </h2>
               <p className="mt-2 text-sm leading-relaxed text-on-field-dim">
