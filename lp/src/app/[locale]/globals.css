@@ -1,131 +1,65 @@
 @import "tailwindcss";
 
-/* Theme tokens — raw CSS variables so `prefers-color-scheme: dark` can override
-   them below. The palette follows the extension itself: Amazon's navy chrome
-   with the orange accent it uses for highlights. */
-:root {
-  --brand: #232f3e;
-  --brand-hover: #131a22;
-  --accent: #e07b00;
-  --ink-1: #131a22;
-  --ink-2: #565f6b;
-  --ink-3: #8d95a0;
-  --surface: #f4f6f8;
-  --card: #ffffff;
-  --border: rgba(19, 26, 34, 0.1);
-  --hero-from: #f8fafc;
-  --hero-via: #eef2f7;
-  --hero-to: #f4f6f8;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --brand: #4c6484;
-    --brand-hover: #5d7ca6;
-    --accent: #ff9900;
-    --ink-1: #f2f4f7;
-    --ink-2: #a8b0bb;
-    --ink-3: #7d8590;
-    --surface: #0c1119;
-    --card: #161d27;
-    --border: rgba(255, 255, 255, 0.1);
-    --hero-from: #0e141d;
-    --hero-via: #111925;
-    --hero-to: #0c1119;
-  }
-}
-
-/* Tailwind v4 theme — `inline` so utilities embed the var() reference literally,
-   which then resolves against the :root overrides above for dark mode. */
+/* A deep green field with white type. Following Amazon's navy and orange
+   dragged the page toward the same dark SaaS look as everything else, so the
+   ground colour is deliberately unrelated to the site the extension runs on.
+   The field is dark by nature, so there is no light/dark switch. */
 @theme inline {
-  --color-brand: var(--brand);
-  --color-brand-hover: var(--brand-hover);
-  --color-accent: var(--accent);
-  --color-ink-1: var(--ink-1);
-  --color-ink-2: var(--ink-2);
-  --color-ink-3: var(--ink-3);
-  --color-surface: var(--surface);
-  --color-card: var(--card);
-  --color-border: var(--border);
+  --color-field: #10352a;
+  --color-field-deep: #0b261e;
+  --color-lime: #c2f04f;
+  --color-panel: #f3f6f0;
+  --color-panel-dim: #e2eadc;
+  --color-ink-1: #0b1d17;
+  --color-ink-2: #4a5b52;
+  --color-ink-3: #8a998f;
+  --color-on-field: #f3f6f0;
+  --color-on-field-dim: rgba(243, 246, 240, 0.66);
+  --color-hairline: rgba(243, 246, 240, 0.18);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
 body {
-  background: var(--color-surface);
-  color: var(--color-ink-1);
+  background: var(--color-field);
+  color: var(--color-on-field);
   font-family: var(--font-sans), -apple-system, BlinkMacSystemFont, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  /* Wrap Japanese at phrase boundaries */
+  word-break: auto-phrase;
 }
 
 ::selection {
-  background: color-mix(in srgb, var(--color-accent) 25%, transparent);
+  background: color-mix(in srgb, var(--color-lime) 35%, transparent);
 }
 
-/* Hero ambient background — soft radial accents */
-.hero-bg {
-  background:
-    radial-gradient(
-      60rem 30rem at 18% -10%,
-      color-mix(in srgb, var(--color-brand) 14%, transparent),
-      transparent 60%
-    ),
-    radial-gradient(
-      50rem 30rem at 82% 0%,
-      color-mix(in srgb, var(--color-accent) 14%, transparent),
-      transparent 60%
-    ),
-    linear-gradient(180deg, var(--hero-from) 0%, var(--hero-via) 50%, var(--hero-to) 100%);
-}
-
-/* Order-history mockup window — subtle elevation */
-.mockup-shell {
-  background: var(--color-card);
-  border: 1px solid var(--color-border);
-  box-shadow:
-    0 1px 0 rgba(255, 255, 255, 0.6) inset,
-    0 30px 60px -20px rgba(0, 0, 0, 0.25),
-    0 10px 30px -10px rgba(0, 0, 0, 0.15);
-}
-
-@media (prefers-color-scheme: dark) {
-  .mockup-shell {
-    box-shadow:
-      0 1px 0 rgba(255, 255, 255, 0.04) inset,
-      0 30px 60px -20px rgba(0, 0, 0, 0.6),
-      0 10px 30px -10px rgba(0, 0, 0, 0.4);
-  }
-}
-
-/* A hidden Kindle row, mid-collapse */
-@keyframes fade-out-row {
+/* The bar that paints over a hidden row — the page doing what the
+   extension does */
+@keyframes redact {
   0%,
-  55% {
-    opacity: 0.4;
-    filter: grayscale(1);
+  20% {
+    transform: scaleX(0);
   }
-  75%,
+  45%,
+  80% {
+    transform: scaleX(1);
+  }
   100% {
-    opacity: 0.08;
-    filter: grayscale(1);
+    transform: scaleX(0);
   }
-}
-.row-hiding {
-  animation: fade-out-row 3.2s ease-in-out infinite alternate;
 }
 
-/* Soft fade-in on load */
-@keyframes fade-up {
-  from {
-    opacity: 0;
-    transform: translateY(8px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+.redaction {
+  transform: scaleX(0);
+  transform-origin: left center;
 }
-.fade-up {
-  animation: fade-up 0.6s ease-out both;
+
+/* Animate only where motion is welcome. Without this the bar would sit at its
+   painted-over state and the rows would stay blacked out for good. */
+@media (prefers-reduced-motion: no-preference) {
+  .redaction {
+    animation: redact 5s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+  }
 }

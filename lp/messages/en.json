@@ -7,7 +7,8 @@
     "description": "A Firefox extension that hides Kindle orders on your Amazon.co.jp order history, one click at a time.",
     "download": "Download",
     "viewOnGithub": "GitHub",
-    "note": "Free · MIT licensed · Firefox 115+"
+    "note": "Free · MIT licensed · Firefox 115+",
+    "title": "Keep Kindle orders\nout of your history."
   },
   "Mockup": {
     "heading": "Order history",
@@ -22,5 +23,19 @@
     "hidden1Date": "Aug 11",
     "hidden2": "美人女上司滝沢さん 10",
     "hidden2Date": "Aug 8"
+  },
+  "Points": {
+    "toggle": {
+      "title": "One click",
+      "body": "Flip the toolbar button to hide or show. There is no settings screen."
+    },
+    "scope": {
+      "title": "Order history only",
+      "body": "It only touches the Amazon.co.jp order history page. Nothing else."
+    },
+    "quiet": {
+      "title": "Nothing sent",
+      "body": "The hiding happens inside your browser. Nothing leaves it."
+    }
   }
 }

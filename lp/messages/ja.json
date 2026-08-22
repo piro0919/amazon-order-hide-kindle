@@ -7,7 +7,8 @@
     "description": "Amazon.co.jp の注文履歴から、Kindle の注文をワンクリックで隠す Firefox 拡張機能です。",
     "download": "ダウンロード",
     "viewOnGithub": "GitHub",
-    "note": "無料 · MIT ライセンス · Firefox 115 以降"
+    "note": "無料 · MIT ライセンス · Firefox 115 以降",
+    "title": "Kindle の注文だけ、\n履歴から消しておく。"
   },
   "Mockup": {
     "heading": "注文履歴",
@@ -22,5 +23,19 @@
     "hidden1Date": "8月11日",
     "hidden2": "美人女上司滝沢さん 10",
     "hidden2Date": "8月8日"
+  },
+  "Points": {
+    "toggle": {
+      "title": "ワンクリック",
+      "body": "ツールバーのボタンで表示と非表示を切り替えます。設定画面はありません。"
+    },
+    "scope": {
+      "title": "注文履歴だけ",
+      "body": "効くのは Amazon.co.jp の注文履歴ページだけ。他のページには触れません。"
+    },
+    "quiet": {
+      "title": "送信なし",
+      "body": "隠す判定はブラウザの中で完結します。どこにも送っていません。"
+    }
   }
 }

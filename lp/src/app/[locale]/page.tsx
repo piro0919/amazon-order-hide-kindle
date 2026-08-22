@@ -4,7 +4,10 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { ReactNode } from "react";
 
 const GITHUB_URL = "https://github.com/piro0919/amazon-order-hide-kindle";
-const RELEASE_URL = "https://github.com/piro0919/amazon-order-hide-kindle/releases/latest";
+const RELEASE_URL =
+  "https://github.com/piro0919/amazon-order-hide-kindle/releases/latest";
+
+const POINTS = ["toggle", "scope", "quiet"] as const;
 
 type PageProps = {
   params: Promise<{ locale: string }>;
@@ -18,103 +21,186 @@ export default async function Page({ params }: PageProps): Promise<ReactNode> {
   const t = await getTranslations();
 
   return (
-    <main className="hero-bg flex min-h-dvh items-center px-6 py-16">
-      <div className="mx-auto grid w-full max-w-5xl gap-12 lg:grid-cols-2 lg:items-center">
-        <div className="fade-up text-center lg:text-left">
-          <div className="mb-6 flex items-center justify-center gap-3 lg:justify-start">
-            <Image
-              src="/icon.png"
-              alt="Hide Kindle Orders"
-              width={56}
-              height={56}
-              className="rounded-[14px] drop-shadow-lg"
-              priority={true}
-            />
-            <h1 className="text-3xl font-bold tracking-tight text-ink-1 sm:text-4xl">
-              Hide Kindle Orders
-            </h1>
-          </div>
-          <p className="mx-auto mb-8 max-w-md text-base leading-relaxed text-ink-2 lg:mx-0">
+    <main>
+      <header className="mx-auto flex max-w-6xl items-center justify-between px-6 py-6">
+        <div className="flex items-center gap-2.5">
+          <Image
+            alt="Hide Kindle Orders"
+            className="rounded-lg"
+            height={28}
+            priority={true}
+            src="/icon.png"
+            width={28}
+          />
+          <span className="text-sm font-semibold text-on-field">
+            Hide Kindle Orders
+          </span>
+        </div>
+        <a
+          className="inline-flex items-center gap-1.5 text-sm text-on-field-dim transition-colors hover:text-lime"
+          href={GITHUB_URL}
+        >
+          <Github size={15} strokeWidth={1.75} />
+          {t("Hero.viewOnGithub")}
+        </a>
+      </header>
+
+      <section className="mx-auto grid max-w-6xl gap-12 px-6 pt-10 pb-20 lg:grid-cols-[1.05fr_0.95fr] lg:items-center lg:gap-16 lg:pt-16 lg:pb-28">
+        <div className="min-w-0">
+          <p className="font-mono text-xs tracking-[0.25em] text-lime uppercase">
+            Firefox Extension
+          </p>
+          <h1 className="mt-6 text-4xl leading-[1.15] font-bold tracking-tight whitespace-pre-line text-on-field sm:text-5xl">
+            {t("Hero.title")}
+          </h1>
+          <p className="mt-6 max-w-md leading-relaxed text-on-field-dim">
             {t("Hero.description")}
           </p>
-          <div className="flex flex-col items-center gap-3 sm:flex-row sm:justify-center lg:justify-start">
+          <div className="mt-10 flex flex-col gap-3 sm:flex-row">
             <a
+              className="inline-flex items-center justify-center gap-2 bg-lime px-6 py-3.5 text-base font-semibold text-ink-1 transition-colors hover:bg-panel"
               href={RELEASE_URL}
-              className="inline-flex items-center gap-2 rounded-xl bg-brand px-5 py-2.5 text-sm font-semibold text-white transition-all hover:-translate-y-0.5 hover:bg-brand-hover"
             >
-              <Download size={16} strokeWidth={2} />
+              <Download size={18} strokeWidth={2} />
               {t("Hero.download")}
             </a>
             <a
+              className="inline-flex items-center justify-center gap-2 border border-hairline px-6 py-3.5 text-base font-semibold text-on-field transition-colors hover:border-lime hover:text-lime"
               href={GITHUB_URL}
-              className="inline-flex items-center gap-2 rounded-xl border border-border bg-card px-5 py-2.5 text-sm font-semibold text-ink-1 transition-all hover:-translate-y-0.5"
             >
-              <Github size={16} strokeWidth={2} />
+              <Github size={18} strokeWidth={2} />
               {t("Hero.viewOnGithub")}
             </a>
           </div>
-          <p className="mt-4 text-center text-xs text-ink-3 lg:text-left">{t("Hero.note")}</p>
+          <p className="mt-6 font-mono text-xs text-on-field-dim">
+            {t("Hero.note")}
+          </p>
         </div>
 
-        <div className="fade-up" style={{ animationDelay: "120ms" }}>
+        <div className="min-w-0">
           <OrderHistoryMockup
             heading={t("Mockup.heading")}
-            toggle={t("Mockup.toggle")}
-            orderLabel={t("Mockup.orderLabel")}
-            kindleLabel={t("Mockup.kindleLabel")}
-            kept={[
-              { title: t("Mockup.kept1"), date: t("Mockup.kept1Date"), price: "¥3,480" },
-              { title: t("Mockup.kept2"), date: t("Mockup.kept2Date"), price: "¥1,280" },
-            ]}
             hidden={[
-              { title: t("Mockup.hidden1"), date: t("Mockup.hidden1Date"), price: "¥792" },
-              { title: t("Mockup.hidden2"), date: t("Mockup.hidden2Date"), price: "¥906" },
+              {
+                date: t("Mockup.hidden1Date"),
+                price: "¥792",
+                title: t("Mockup.hidden1"),
+              },
+              {
+                date: t("Mockup.hidden2Date"),
+                price: "¥906",
+                title: t("Mockup.hidden2"),
+              },
             ]}
+            kept={[
+              {
+                date: t("Mockup.kept1Date"),
+                price: "¥3,480",
+                title: t("Mockup.kept1"),
+              },
+              {
+                date: t("Mockup.kept2Date"),
+                price: "¥1,280",
+                title: t("Mockup.kept2"),
+              },
+            ]}
+            kindleLabel={t("Mockup.kindleLabel")}
+            orderLabel={t("Mockup.orderLabel")}
+            toggle={t("Mockup.toggle")}
           />
         </div>
-      </div>
+      </section>
+
+      <section className="bg-field-deep">
+        <div className="mx-auto grid max-w-6xl gap-px px-6 sm:grid-cols-3">
+          {POINTS.map((key, i) => (
+            <div
+              className="border-hairline py-12 sm:border-l sm:px-8 sm:first:border-l-0 sm:first:pl-0"
+              key={key}
+            >
+              <span className="font-mono text-xs text-lime">
+                {String(i + 1).padStart(2, "0")}
+              </span>
+              <h2 className="mt-4 text-lg font-semibold text-on-field">
+                {t(`Points.${key}.title`)}
+              </h2>
+              <p className="mt-2 text-sm leading-relaxed text-on-field-dim">
+                {t(`Points.${key}.body`)}
+              </p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <footer className="mx-auto flex max-w-6xl flex-col items-center gap-3 px-6 py-10 sm:flex-row sm:justify-between">
+        <span className="text-sm text-on-field-dim">
+          Made by{" "}
+          <a
+            className="text-on-field transition-colors hover:text-lime"
+            href={GITHUB_URL}
+          >
+            piro0919
+          </a>
+        </span>
+        <a
+          className="font-mono text-xs text-on-field-dim transition-colors hover:text-lime"
+          href={GITHUB_URL}
+        >
+          {t("Hero.viewOnGithub")}
+        </a>
+      </footer>
     </main>
   );
 }
 
 type Order = {
-  title: string;
   date: string;
   price: string;
+  title: string;
 };
 
 type MockupProps = {
   heading: string;
-  toggle: string;
-  orderLabel: string;
-  kindleLabel: string;
-  kept: Order[];
   hidden: Order[];
+  kept: Order[];
+  kindleLabel: string;
+  orderLabel: string;
+  toggle: string;
 };
 
 function OrderHistoryMockup({
   heading,
-  toggle,
-  orderLabel,
-  kindleLabel,
-  kept,
   hidden,
+  kept,
+  kindleLabel,
+  orderLabel,
+  toggle,
 }: MockupProps): ReactNode {
   return (
-    <div className="mockup-shell mx-auto w-full max-w-sm overflow-hidden rounded-2xl">
-      <div className="flex items-center justify-between border-b border-border px-4 py-3">
+    <div className="mx-auto w-full max-w-md overflow-hidden bg-panel shadow-[0_30px_60px_-25px_rgba(0,0,0,0.5)]">
+      <div className="flex items-center justify-between border-b border-panel-dim px-5 py-4">
         <p className="text-sm font-semibold text-ink-1">{heading}</p>
-        <span className="rounded-full bg-brand px-3 py-1 text-[11px] font-semibold text-white">
+        <span className="bg-ink-1 px-3 py-1 font-mono text-[11px] font-semibold text-lime">
           {toggle}
         </span>
       </div>
-      <div className="divide-y divide-border">
+      <div>
         {kept.map((order) => (
           <OrderRow key={order.title} order={order} orderLabel={orderLabel} />
         ))}
-        {hidden.map((order) => (
-          <div key={order.title} className="row-hiding">
-            <OrderRow order={order} orderLabel={orderLabel} kindleLabel={kindleLabel} />
+        {hidden.map((order, i) => (
+          <div className="relative" key={order.title}>
+            <OrderRow
+              kindleLabel={kindleLabel}
+              order={order}
+              orderLabel={orderLabel}
+            />
+            {/* A row the extension removes. The bar runs in from the left */}
+            <span
+              aria-hidden="true"
+              className="redaction absolute inset-x-4 inset-y-2 bg-ink-1"
+              style={{ animationDelay: `${i * 260}ms` }}
+            />
           </div>
         ))}
       </div>
@@ -123,28 +209,30 @@ function OrderHistoryMockup({
 }
 
 function OrderRow({
+  kindleLabel,
   order,
   orderLabel,
-  kindleLabel,
 }: {
+  kindleLabel?: string;
   order: Order;
   orderLabel: string;
-  kindleLabel?: string;
 }): ReactNode {
   return (
-    <div className="px-4 py-3">
-      <div className="mb-1.5 flex items-center justify-between text-[11px] text-ink-3">
+    <div className="border-b border-panel-dim px-5 py-4 last:border-b-0">
+      <div className="mb-2 flex items-center justify-between font-mono text-[11px] text-ink-3">
         <span>
           {orderLabel} {order.date}
         </span>
         <span>{order.price}</span>
       </div>
       <div className="flex items-center gap-3">
-        <span className="size-8 shrink-0 rounded-md bg-border" />
+        <span className="size-9 shrink-0 bg-panel-dim" />
         <div className="min-w-0 flex-1">
           <p className="truncate text-sm text-ink-1">{order.title}</p>
           {kindleLabel ? (
-            <p className="mt-0.5 text-[11px] font-semibold text-accent">{kindleLabel}</p>
+            <p className="mt-0.5 font-mono text-[11px] text-ink-2">
+              {kindleLabel}
+            </p>
           ) : null}
         </div>
       </div>
