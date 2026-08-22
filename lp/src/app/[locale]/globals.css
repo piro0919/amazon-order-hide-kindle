@@ -1,21 +1,19 @@
 @import "tailwindcss";
 
-/* A deep green field with white type. Following Amazon's navy and orange
-   dragged the page toward the same dark SaaS look as everything else, so the
-   ground colour is deliberately unrelated to the site the extension runs on.
-   The field is dark by nature, so there is no light/dark switch. */
+/* The palette comes from the extension's own icon: the navy ground and the
+   orange slash. The field is dark by nature, so there is no light/dark switch. */
 @theme inline {
-  --color-field: #10352a;
-  --color-field-deep: #0b261e;
-  --color-lime: #c2f04f;
-  --color-panel: #f3f6f0;
-  --color-panel-dim: #e2eadc;
-  --color-ink-1: #0b1d17;
-  --color-ink-2: #4a5b52;
-  --color-ink-3: #8a998f;
-  --color-on-field: #f3f6f0;
-  --color-on-field-dim: rgba(243, 246, 240, 0.66);
-  --color-hairline: rgba(243, 246, 240, 0.18);
+  --color-field: #232f3e;
+  --color-field-deep: #1a242f;
+  --color-lime: #ff9900;
+  --color-panel: #f4f6f8;
+  --color-panel-dim: #dfe4ea;
+  --color-ink-1: #131a22;
+  --color-ink-2: #4a5563;
+  --color-ink-3: #8b95a1;
+  --color-on-field: #f4f6f8;
+  --color-on-field-dim: rgba(244, 246, 248, 0.68);
+  --color-hairline: rgba(244, 246, 248, 0.2);
   --font-sans: var(--font-geist-sans);
   --font-display: var(--font-display);
   --font-mono: var(--font-geist-mono);
