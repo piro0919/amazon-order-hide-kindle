@@ -36,29 +36,30 @@ body {
 
 /* The bar that paints over a hidden row — the page doing what the
    extension does */
+/* Covered is the resting state: that is what the extension does. The bar
+   pulls back briefly to show what is being hidden, then paints over again.
+   The other way round, most frames showed the Kindle rows in plain sight. */
 @keyframes redact {
   0%,
-  20% {
-    transform: scaleX(0);
-  }
-  45%,
-  80% {
+  55% {
     transform: scaleX(1);
   }
-  100% {
+  70%,
+  85% {
     transform: scaleX(0);
+  }
+  100% {
+    transform: scaleX(1);
   }
 }
 
 .redaction {
-  transform: scaleX(0);
+  transform: scaleX(1);
   transform-origin: left center;
 }
 
-/* Animate only where motion is welcome. Without this the bar would sit at its
-   painted-over state and the rows would stay blacked out for good. */
 @media (prefers-reduced-motion: no-preference) {
   .redaction {
-    animation: redact 5s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+    animation: redact 6s cubic-bezier(0.65, 0, 0.35, 1) infinite;
   }
 }
