@@ -62,9 +62,7 @@ export default async function OgImage({
           <div>Orders</div>
         </div>
         <div style={{ color: ORANGE, display: "flex", fontSize: 34, marginTop: 20 }}>
-          {isJa
-            ? "注文履歴から Kindle だけ消す"
-            : "Keep Kindle orders out of your history"}
+          {isJa ? "注文履歴から Kindle だけ消す" : "Keep Kindle orders out of your history"}
         </div>
       </div>
       {/* biome-ignore lint/performance/noImgElement: next/image is not available in ImageResponse */}
@@ -72,9 +70,7 @@ export default async function OgImage({
     </div>,
     {
       ...size,
-      fonts: [
-        { data: font, name: "BIZ UDPGothic", style: "normal", weight: 700 },
-      ],
+      fonts: [{ data: font, name: "BIZ UDPGothic", style: "normal", weight: 700 }],
     },
   );
 }

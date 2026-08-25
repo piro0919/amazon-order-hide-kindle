@@ -4,8 +4,7 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { ReactNode } from "react";
 
 const GITHUB_URL = "https://github.com/piro0919/amazon-order-hide-kindle";
-const RELEASE_URL =
-  "https://github.com/piro0919/amazon-order-hide-kindle/releases/latest";
+const RELEASE_URL = "https://github.com/piro0919/amazon-order-hide-kindle/releases/latest";
 
 const POINTS = ["toggle", "scope", "quiet"] as const;
 
@@ -32,9 +31,7 @@ export default async function Page({ params }: PageProps): Promise<ReactNode> {
             src="/icon.png"
             width={28}
           />
-          <span className="text-sm font-semibold text-on-field">
-            Hide Kindle Orders
-          </span>
+          <span className="text-sm font-semibold text-on-field">Hide Kindle Orders</span>
         </div>
         <a
           className="inline-flex items-center gap-1.5 text-sm text-on-field-dim transition-colors hover:text-lime"
@@ -53,9 +50,7 @@ export default async function Page({ params }: PageProps): Promise<ReactNode> {
           <h1 className="mt-6 font-display text-4xl leading-[1.15] font-bold tracking-tight whitespace-pre-line text-on-field sm:text-5xl">
             {t("Hero.title")}
           </h1>
-          <p className="mt-6 max-w-md leading-relaxed text-on-field-dim">
-            {t("Hero.description")}
-          </p>
+          <p className="mt-6 max-w-md leading-relaxed text-on-field-dim">{t("Hero.description")}</p>
           <div className="mt-10 flex flex-col gap-3 sm:flex-row">
             <a
               className="inline-flex items-center justify-center gap-2 bg-lime px-6 py-3.5 text-base font-semibold text-ink-1 transition-colors hover:bg-panel"
@@ -72,9 +67,7 @@ export default async function Page({ params }: PageProps): Promise<ReactNode> {
               {t("Hero.viewOnGithub")}
             </a>
           </div>
-          <p className="mt-6 font-mono text-xs text-on-field-dim">
-            {t("Hero.note")}
-          </p>
+          <p className="mt-6 font-mono text-xs text-on-field-dim">{t("Hero.note")}</p>
         </div>
 
         <div className="min-w-0">
@@ -118,9 +111,7 @@ export default async function Page({ params }: PageProps): Promise<ReactNode> {
               className="border-hairline py-12 sm:border-l sm:px-8 sm:first:border-l-0 sm:first:pl-0"
               key={key}
             >
-              <span className="font-mono text-xs text-lime">
-                {String(i + 1).padStart(2, "0")}
-              </span>
+              <span className="font-mono text-xs text-lime">{String(i + 1).padStart(2, "0")}</span>
               <h2 className="mt-4 font-display text-lg font-semibold text-on-field">
                 {t(`Points.${key}.title`)}
               </h2>
@@ -135,10 +126,7 @@ export default async function Page({ params }: PageProps): Promise<ReactNode> {
       <footer className="mx-auto flex max-w-6xl flex-col items-center gap-3 px-6 py-10 sm:flex-row sm:justify-between">
         <span className="text-sm text-on-field-dim">
           Made by{" "}
-          <a
-            className="text-on-field transition-colors hover:text-lime"
-            href={GITHUB_URL}
-          >
+          <a className="text-on-field transition-colors hover:text-lime" href={GITHUB_URL}>
             piro0919
           </a>
         </span>
@@ -190,11 +178,7 @@ function OrderHistoryMockup({
         ))}
         {hidden.map((order, i) => (
           <div className="relative" key={order.title}>
-            <OrderRow
-              kindleLabel={kindleLabel}
-              order={order}
-              orderLabel={orderLabel}
-            />
+            <OrderRow kindleLabel={kindleLabel} order={order} orderLabel={orderLabel} />
             {/* A row the extension removes. The bar runs in from the left */}
             <span
               aria-hidden="true"
@@ -230,9 +214,7 @@ function OrderRow({
         <div className="min-w-0 flex-1">
           <p className="truncate text-sm text-ink-1">{order.title}</p>
           {kindleLabel ? (
-            <p className="mt-0.5 font-mono text-[11px] text-ink-2">
-              {kindleLabel}
-            </p>
+            <p className="mt-0.5 font-mono text-[11px] text-ink-2">{kindleLabel}</p>
           ) : null}
         </div>
       </div>
