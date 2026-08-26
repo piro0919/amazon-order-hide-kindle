@@ -64,3 +64,7 @@ If later pages still show Kindle orders, switching Infy Scroll's append mode to 
 - The order count ("390件の注文") comes from Amazon and does not change
 - Paging is decided by Amazon, so each page shows fewer entries once orders are hidden
 - An order containing a "Kindle版" item disappears entirely, even if the same order also holds a physical item
+
+## License
+
+MIT
