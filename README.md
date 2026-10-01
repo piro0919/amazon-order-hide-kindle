@@ -78,6 +78,15 @@ If later pages still show Kindle orders, switching Infy Scroll's append mode to 
 - Paging is decided by Amazon, so each page shows fewer entries once orders are hidden
 - An order containing a "Kindle版" item disappears entirely, even if the same order also holds a physical item
 
+## Tests
+
+```sh
+pnpm install
+pnpm test
+```
+
+`test/content.test.js` loads `test/fixtures/order-history.html` into jsdom, runs `content.js` unchanged, and checks which elements end up marked as Kindle order cards. The fixture is hand-written after the shape of Amazon's markup and holds only placeholder data. The root `package.json` exists only for this; its `webExt.ignoreFiles` keeps the tests and `lp/` out of the extension package.
+
 ## License
 
 MIT

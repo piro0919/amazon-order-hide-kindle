@@ -18,6 +18,22 @@ jobs:
       # MANIFEST_UPDATE_URL のエラーになる。
       - run: npx --yes web-ext@8 lint --source-dir . --self-hosted
 
+  # content.js を注文履歴の模造 HTML に当て、隠す対象のカードを確かめる。
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22.23.2
+          cache: pnpm
+          cache-dependency-path: pnpm-lock.yaml
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm test
+
   # ランディングページは lp/ に独立して置いてある。
   lp:
     runs-on: ubuntu-latest

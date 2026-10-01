@@ -17,6 +17,12 @@ Amazon.co.jp の注文履歴から「Kindle版」を含む注文カードを隠�
 - `content.js` — 「Kindle版」のテキストノードから親をたどり、「注文番号」を1件だけ含む最小の祖先を注文カードとみなして隠す。右下のトグル、`browser.storage.local` での状態保持、無限スクロール対応まで全てここ
 - `icons/icon.svg` — アイコンの原本。PNG は生成物
 
+### テスト
+
+- `test/content.test.js` — jsdom に `test/fixtures/order-history.html` を読み込み、`content.js` をそのまま実行して印の付いたカードを確かめる。`browser.storage` は差し替え
+- フィクスチャは Amazon のマークアップの形だけを写した手書き。実際の注文の名前・番号・金額を入れない
+- ルートの `package.json` はテスト用の jsdom のためだけにある。`webExt.ignoreFiles` で `lp/` とテスト一式を拡張のパッケージから外している
+
 ### スクリプト
 
 - `scripts/build-icons.mjs` — SVG から拡張用と LP 用の PNG を生成
@@ -35,7 +41,8 @@ Amazon.co.jp の注文履歴から「Kindle版」を含む注文カードを隠�
 
 ```bash
 node scripts/build-icons.mjs   # アイコン生成
-npx web-ext lint --source-dir . # 検証
+npx web-ext lint --source-dir . --self-hosted # 検証
+pnpm install && pnpm test      # content.js を test/fixtures の模造 HTML に当てる回帰テスト
 AMO_JWT_ISSUER=... AMO_JWT_SECRET=... node scripts/release.mjs  # 署名済み xpi
 
 cd lp && pnpm dev              # LP 開発サーバー

@@ -1,0 +1,70 @@
+<!doctype html>
+<!--
+  Hand-written stand-in for the Amazon.co.jp order history, shaped after its
+  markup: one container, one card per order, the "注文番号" label in the card
+  header and the format ("Kindle版") next to the item title. Every name,
+  number, price and date is a placeholder; nothing comes from a real account.
+-->
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <title>注文履歴</title>
+  </head>
+  <body>
+    <div id="navbar">
+      <a href="#">アカウント＆リスト</a>
+      <!-- A recommendation strip outside the orders: must never be hidden -->
+      <div id="rhf"><span>Kindle版</span> のおすすめ</div>
+    </div>
+    <h1>注文履歴</h1>
+    <div class="your-orders-content-container">
+      <div class="num-orders">3件の注文</div>
+
+      <div class="order-card js-order-card" data-testid="kindle">
+        <div class="order-header">
+          <div><span>注文日</span><span>2000年1月1日</span></div>
+          <div><span>合計</span><span>￥0</span></div>
+          <div><span>注文番号</span><bdi dir="ltr">D00-0000000-0000000</bdi></div>
+        </div>
+        <div class="delivery-box">
+          <div class="yohtmlc-item">
+            <a class="a-link-normal" href="#">Sample Book Title 1</a>
+            <span class="a-size-small">Kindle版</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="order-card js-order-card" data-testid="paper">
+        <div class="order-header">
+          <div><span>注文日</span><span>2000年1月2日</span></div>
+          <div><span>合計</span><span>￥0</span></div>
+          <div><span>注文番号</span><bdi dir="ltr">000-0000000-0000001</bdi></div>
+        </div>
+        <div class="delivery-box">
+          <div class="yohtmlc-item">
+            <a class="a-link-normal" href="#">Sample Book Title 2</a>
+            <span class="a-size-small">単行本</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="order-card js-order-card" data-testid="kindle-nested">
+        <div class="order-header">
+          <div><span>注文日</span><span>2000年1月3日</span></div>
+          <div><span>注文番号</span><bdi dir="ltr">D00-0000000-0000002</bdi></div>
+        </div>
+        <div class="delivery-box">
+          <div class="a-fixed-left-grid">
+            <div class="a-fixed-left-grid-col">
+              <div class="a-row">
+                <div class="a-row">
+                  <a class="a-link-normal" href="#">Sample Comic Vol. 3 (Sample Comics) Kindle版</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

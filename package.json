@@ -1,0 +1,14 @@
+{
+  "name": "amazon-order-hide-kindle",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test \"test/*.test.js\""
+  },
+  "devDependencies": {
+    "jsdom": "^30.1.1"
+  },
+  "webExt": {
+    "ignoreFiles": ["lp", "test", "package.json", "pnpm-lock.yaml"]
+  }
+}
