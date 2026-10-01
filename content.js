@@ -9,6 +9,8 @@ const CARD_MARKER = /注文番号/g;
 const CARD_ATTR = "data-hide-kindle-card";
 const BUTTON_ATTR = "data-hide-kindle-button";
 const STATE_KEY = "hide-kindle-orders:hidden";
+/** Where versions up to 1.1.3 kept the state, in Amazon's localStorage. */
+const LEGACY_STATE_KEY = "hide-kindle-orders:hidden";
 const MAX_DEPTH = 20;
 
 /** Hiding is done with an attribute plus a stylesheet, so the toggle can simply
@@ -73,25 +75,56 @@ function markKindleOrders() {
 
 // --- Toggle ---
 
-/** State lives in localStorage, which is shared with same-origin iframes. */
-function isHidden() {
-  try {
-    return localStorage.getItem(STATE_KEY) !== "false";
-  } catch {
-    return true;
-  }
-}
-
+/**
+ * State lives in the extension's own storage rather than Amazon's localStorage,
+ * so the page cannot read or clear it. storage.onChanged reaches every frame,
+ * which keeps pages Infy Scroll appends inside an iframe in step with the top.
+ */
+let hidden = true;
 let button = null;
 
 function applyState() {
-  const hidden = isHidden();
-
   sheet.disabled = !hidden;
 
   if (!button) return;
 
   button.textContent = hidden ? "Hide Kindle: On" : "Hide Kindle: Off";
+}
+
+/** Earlier versions kept the state in Amazon's localStorage. Copy it over once. */
+function takeLegacyState() {
+  try {
+    const legacy = localStorage.getItem(LEGACY_STATE_KEY);
+
+    if (legacy === null) return undefined;
+
+    localStorage.removeItem(LEGACY_STATE_KEY);
+
+    return legacy !== "false";
+  } catch {
+    return undefined;
+  }
+}
+
+async function loadState() {
+  try {
+    const stored = await browser.storage.local.get(STATE_KEY);
+
+    if (typeof stored[STATE_KEY] === "boolean") {
+      hidden = stored[STATE_KEY];
+    } else {
+      const legacy = takeLegacyState();
+
+      if (legacy !== undefined) {
+        hidden = legacy;
+        await browser.storage.local.set({ [STATE_KEY]: hidden });
+      }
+    }
+  } catch {
+    // Storage unavailable: keep the default, which hides the orders.
+  }
+
+  applyState();
 }
 
 if (window.top === window) {
@@ -126,22 +159,24 @@ if (window.top === window) {
   button.type = "button";
   button.setAttribute(BUTTON_ATTR, "");
   button.addEventListener("click", () => {
-    try {
-      localStorage.setItem(STATE_KEY, String(!isHidden()));
-    } catch {
-      // Private windows may refuse writes; the toggle then just isn't persisted.
-    }
-
+    hidden = !hidden;
     applyState();
+    browser.storage.local.set({ [STATE_KEY]: hidden }).catch(() => {
+      // Not persisted; the toggle still applies to this page.
+    });
   });
   document.body.appendChild(button);
 }
 
 applyState();
+loadState();
 
-// Follow toggles made in other frames. The storage event skips its own frame.
-window.addEventListener("storage", (event) => {
-  if (event.key === STATE_KEY) applyState();
+// Follow toggles made in other frames.
+browser.storage.onChanged.addListener((changes, area) => {
+  if (area !== "local" || !(STATE_KEY in changes)) return;
+
+  hidden = changes[STATE_KEY].newValue !== false;
+  applyState();
 });
 
 // --- Startup and rescanning ---

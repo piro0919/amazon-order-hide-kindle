@@ -41,7 +41,7 @@ macOS has no SVG rasterizer installed by default that preserves transparency —
 
 A button sits in the bottom right of the order history. Its label reflects the current state: "Hide Kindle: On" means the orders are hidden, "Hide Kindle: Off" means they are visible. Clicking flips it. The color is fixed; the button is translucent at rest and becomes opaque on hover or keyboard focus.
 
-The state is kept in `localStorage`, so it survives a reload. Being same-origin, pages that Infy Scroll appends inside an iframe load with the same state, and toggling propagates through the `storage` event.
+The state is kept in the extension's own `browser.storage.local`, out of reach of Amazon's scripts, so it survives a reload. Pages that Infy Scroll appends inside an iframe read the same state, and toggling propagates through `storage.onChanged`. Versions up to 1.1.3 kept it in Amazon's `localStorage`; that value is moved over once on the first load and then removed.
 
 ## How it works
 

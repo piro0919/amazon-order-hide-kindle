@@ -14,7 +14,7 @@ Amazon.co.jp の注文履歴から「Kindle版」を含む注文カードを隠�
 ### 拡張本体
 
 - `manifest.json` — 注文履歴の URL にのみ content script を注入。`all_frames: true`
-- `content.js` — 「Kindle版」のテキストノードから親をたどり、「注文番号」を1件だけ含む最小の祖先を注文カードとみなして隠す。右下のトグル、`localStorage` での状態保持、無限スクロール対応まで全てここ
+- `content.js` — 「Kindle版」のテキストノードから親をたどり、「注文番号」を1件だけ含む最小の祖先を注文カードとみなして隠す。右下のトグル、`browser.storage.local` での状態保持、無限スクロール対応まで全てここ
 - `icons/icon.svg` — アイコンの原本。PNG は生成物
 
 ### スクリプト
@@ -28,7 +28,7 @@ Amazon.co.jp の注文履歴から「Kindle版」を含む注文カードを隠�
 - **判定文字列は日本語のまま**: `Kindle版` と `注文番号` は Amazon が実際にページへ出している表記。ここだけは英語化しない
 - **web-ext sign を使わない**: 同じ鍵でも `Unknown JWT iss (issuer)` を返したり返さなかったりする。API を直接叩くと安定するため `scripts/release.mjs` を自前で持つ
 - **アイコンの角丸は後処理**: macOS に透過を保つ SVG ラスタライザが入っていない。全面塗りで書き出し、アルファチャネルを書き換えて角を抜く
-- **状態は localStorage**: 同一オリジンなので、Infy Scroll が iframe で追加したページとも `storage` イベントで同期できる
+- **状態は browser.storage.local**: Amazon の localStorage に置くとページ側から読み書きできてしまうため、拡張専用の領域に置く。`storage.onChanged` は全フレームに届くので、Infy Scroll が iframe で追加したページとも同期できる。1.1.3 までの localStorage の値は初回読み込み時に一度だけ移して消す
 
 ## Commands
 
