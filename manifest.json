@@ -9,7 +9,8 @@
         "required": ["none"]
       },
       "id": "amazon-order-hide-kindle@piro0919",
-      "strict_min_version": "115.0"
+      "strict_min_version": "115.0",
+      "update_url": "https://hide-kindle-orders.kkweb.io/updates.json"
     }
   },
   "permissions": ["storage"],

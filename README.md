@@ -27,6 +27,19 @@ Release Firefox will not permanently install an unsigned extension. A self-distr
 
 This uses the unlisted channel, so the add-on is signed for personal use and never published to the store. Review is automated only.
 
+## Updates
+
+`manifest.json` sets `browser_specific_settings.gecko.update_url` to `https://hide-kindle-orders.kkweb.io/updates.json`, so Firefox checks for new versions on its own. The file lives at `lp/public/updates.json` and is deployed with the landing page.
+
+`scripts/release.mjs` appends the new version to that file, with a link to the GitHub release asset and the sha256 of the signed xpi. After it runs:
+
+1. Create the release with the xpi: `gh release create vX.Y.Z web-ext-artifacts/amazon-order-hide-kindle-X.Y.Z.xpi`
+2. Commit `manifest.json` and `lp/public/updates.json`, then push so the landing page redeploys
+
+Publish the release before the updated `updates.json` goes live, or Firefox will follow a link that does not exist yet. Versions up to 1.1.3 have no `update_url`, so an install of one of them has to be replaced by hand once.
+
+`web-ext lint` needs `--self-hosted` because of `update_url`; without it the linter reports that the key is not allowed for add-ons hosted on AMO.
+
 `npx web-ext sign` is deliberately avoided: with the very same credentials it returns `Unknown JWT iss (issuer)` intermittently. Hitting the API directly is reliable, so `scripts/release.mjs` handles the build, upload, validation polling, version creation, and signed-xpi download itself.
 
 To build a package without signing, run `npx web-ext build`; the zip lands in `web-ext-artifacts/`.

@@ -14,6 +14,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22.23.2
+      # 自前配布で update_url を持つため --self-hosted が要る。外すと
+      # MANIFEST_UPDATE_URL のエラーになる。
       - run: npx --yes web-ext@8 lint --source-dir . --self-hosted
 
   # ランディングページは lp/ に独立して置いてある。

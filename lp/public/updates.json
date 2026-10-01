@@ -1,0 +1,13 @@
+{
+  "addons": {
+    "amazon-order-hide-kindle@piro0919": {
+      "updates": [
+        {
+          "version": "1.1.3",
+          "update_link": "https://github.com/piro0919/amazon-order-hide-kindle/releases/download/v1.1.3/amazon-order-hide-kindle-1.1.3.xpi",
+          "update_hash": "sha256:800fa526a5836acfc50741861c3c17b50cc399eb539e7ca967eb9db5261f2d6c"
+        }
+      ]
+    }
+  }
+}

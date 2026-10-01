@@ -45,8 +45,17 @@ cd lp && pnpm build            # LP ビルド
 ## リリース手順
 
 1. `manifest.json` の `version` を上げる（AMO は同じバージョンを二度受け付けない）
-2. `node scripts/release.mjs` で署名済み xpi を取得
+2. `node scripts/release.mjs` で署名済み xpi を取得。同時に `lp/public/updates.json` へ新しい版が追記される
 3. `gh release create vX.Y.Z web-ext-artifacts/amazon-order-hide-kindle-X.Y.Z.xpi`
+4. `manifest.json` と `lp/public/updates.json` をコミットして push。LP と一緒に `https://hide-kindle-orders.kkweb.io/updates.json` が更新され、入れている Firefox が自動で新しい版を取りに来る
+
+`updates.json` の `update_link` は GitHub Release の添付ファイルを指すので、3 より先に 4 を出さない。`update_hash` は手で書き換えない。
+
+### 自動更新
+
+`manifest.json` の `browser_specific_settings.gecko.update_url` が LP の `/updates.json` を指す。ファイルの実体は `lp/public/updates.json` で、LP の middleware は拡張子付きのパスを素通しするので静的ファイルとしてそのまま配信される。1.1.3 以前の版には `update_url` が無いため、そこからは一度だけ手動で入れ替える必要がある。
+
+CI の `web-ext lint` に `--self-hosted` を付けているのはこのため。外すと `update_url` が AMO 公開版では使えないというエラーになる。
 
 ## Conventions
 

@@ -1,4 +1,5 @@
-// Build, upload to AMO, create the version, and fetch the signed xpi in one pass.
+// Build, upload to AMO, create the version, fetch the signed xpi, and add the
+// version to lp/public/updates.json in one pass.
 // web-ext sign returns Unknown JWT iss intermittently for the same credentials,
 // so this talks to the API directly.
 //
@@ -25,6 +26,8 @@ const manifest = JSON.parse(
   fs.readFileSync(path.join(ROOT, "manifest.json"), "utf8"),
 );
 const GUID = manifest.browser_specific_settings.gecko.id;
+const REPO = "piro0919/amazon-order-hide-kindle";
+const UPDATES = path.join(ROOT, "lp", "public", "updates.json");
 const VERSION = manifest.version;
 
 /** AMO tokens are short lived, so a fresh one is minted per request. */
@@ -129,5 +132,24 @@ const url = await poll("signing", 40, 10000, async () => {
 });
 const out = path.join(artifacts, `amazon-order-hide-kindle-${VERSION}.xpi`);
 
-fs.writeFileSync(out, Buffer.from(await (await api(url)).arrayBuffer()));
+const signed = Buffer.from(await (await api(url)).arrayBuffer());
+
+fs.writeFileSync(out, signed);
 console.log(`signed: ${out}`);
+
+// 5. List the version in the update manifest Firefox polls through update_url.
+// The link points at the GitHub release asset, so the release has to exist
+// before this file is deployed with the landing page.
+const updates = JSON.parse(fs.readFileSync(UPDATES, "utf8"));
+const entries = updates.addons[GUID].updates.filter(
+  (entry) => entry.version !== VERSION,
+);
+
+entries.push({
+  version: VERSION,
+  update_link: `https://github.com/${REPO}/releases/download/v${VERSION}/${path.basename(out)}`,
+  update_hash: `sha256:${crypto.createHash("sha256").update(signed).digest("hex")}`,
+});
+updates.addons[GUID].updates = entries;
+fs.writeFileSync(UPDATES, `${JSON.stringify(updates, null, 2)}\n`);
+console.log(`updates.json: added ${VERSION}`);
