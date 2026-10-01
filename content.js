@@ -181,28 +181,43 @@ browser.storage.onChanged.addListener((changes, area) => {
 
 // --- Startup and rescanning ---
 
-let scheduled = false;
+/**
+ * Amazon's container for the order list. Watching only this keeps the observer
+ * quiet while ads and recommendations elsewhere on the page re-render. The ids
+ * are a narrowing hint only: cards are still found by the order number label,
+ * and the whole body is watched when none of them is present.
+ */
+const ORDER_CONTAINERS = [
+  "#ordersContainer",
+  "#yourOrdersContent",
+  ".your-orders-content-container",
+];
+const RESCAN_DELAY = 200;
+const FALLBACK_INTERVAL = 15000;
+
+let timer = 0;
 
 function schedule() {
-  if (scheduled) return;
+  if (timer) return;
 
-  scheduled = true;
-  requestAnimationFrame(() => {
-    scheduled = false;
+  timer = setTimeout(() => {
+    timer = 0;
     markKindleOrders();
-  });
+  }, RESCAN_DELAY);
 }
 
 markKindleOrders();
 
-new MutationObserver(schedule).observe(document.body, {
+const container = document.querySelector(ORDER_CONTAINERS.join(","));
+
+new MutationObserver(schedule).observe(container ?? document.body, {
   childList: true,
   subtree: true,
 });
 
 // Notifications from Infy Scroll and other AutoPagerize-style extensions when a
-// next page is appended. This overlaps with the MutationObserver, but CARD_ATTR
-// keeps the work idempotent.
+// next page is appended, possibly outside the watched container. CARD_ATTR keeps
+// the work idempotent.
 for (const eventName of [
   "GM_AutoPagerizeLoaded",
   "GM_AutoPagerizeNextPageLoaded",
@@ -212,6 +227,6 @@ for (const eventName of [
   document.addEventListener(eventName, schedule, false);
 }
 
-// Fallback for appended pages that arrive through a shadow root or some other
-// path the observer cannot see.
-setInterval(schedule, 1500);
+// With a narrowed observer, an infrequent full pass catches anything appended
+// outside the container without an event.
+if (container) setInterval(schedule, FALLBACK_INTERVAL);

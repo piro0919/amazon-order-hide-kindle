@@ -45,7 +45,7 @@ The state is kept in the extension's own `browser.storage.local`, out of reach o
 
 ## How it works
 
-`content.js` looks for the text "Kindle版" and walks up from there to the smallest ancestor containing exactly one "注文番号" (order number) label, treats that element as the order card, and applies `display: none`. Because it never depends on class names, it holds up reasonably well against Amazon's markup changes. A MutationObserver re-runs the scan for infinite scroll and lazily rendered content.
+`content.js` looks for the text "Kindle版" and walks up from there to the smallest ancestor containing exactly one "注文番号" (order number) label, treats that element as the order card, and applies `display: none`. Because it never depends on class names, it holds up reasonably well against Amazon's markup changes. A MutationObserver on the order list re-runs the scan, debounced, for infinite scroll and lazily rendered content.
 
 Both Japanese strings are Amazon's own on-page wording, so they stay in Japanese.
 
@@ -55,7 +55,7 @@ Three measures keep it working past page one.
 
 - `all_frames: true`, since Infy Scroll's Iframe and AJAX modes place appended pages inside an iframe
 - Listening for AutoPagerize-style events such as `GM_AutoPagerizeLoaded`
-- A rescan every 1.5 seconds as a fallback
+- A MutationObserver on Amazon's order list container, with rescans debounced to 200 ms. When the container is found, a full pass every 15 seconds catches pages appended outside it; otherwise the observer watches the whole body
 
 If later pages still show Kindle orders, switching Infy Scroll's append mode to Element (AutoPagerize mode) makes it certain.
 
