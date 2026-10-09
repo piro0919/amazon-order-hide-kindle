@@ -42,7 +42,8 @@ export default async function OgImage({
         display: "flex",
         gap: 60,
         height: "100%",
-        padding: "0 84px",
+        /* 中央に寄せる。左寄せだと副題の短い日本語版で右が大きく空く */
+        justifyContent: "center",
         width: "100%",
       }}
     >
@@ -61,12 +62,29 @@ export default async function OgImage({
           <div>Hide Kindle</div>
           <div>Orders</div>
         </div>
-        <div style={{ color: ORANGE, display: "flex", fontSize: 34, marginTop: 20 }}>
-          {isJa ? "注文履歴から Kindle だけ消す" : "Keep Kindle orders out of your history"}
+        {/* 英語は1行だと題名より大きくはみ出し、左右の余白が日本語版の半分以下になるので2行に折る */}
+        <div
+          style={{
+            color: ORANGE,
+            display: "flex",
+            flexDirection: "column",
+            fontSize: 34,
+            lineHeight: 1.4,
+            marginTop: 20,
+          }}
+        >
+          {(isJa
+            ? ["注文履歴から Kindle だけ消す"]
+            : ["Keep Kindle orders", "out of your history"]
+          ).map((line) => (
+            <div key={line}>{line}</div>
+          ))}
         </div>
       </div>
+      {/* icon.png は絵の周りに 280px 換算で 43px の地がある。右側だけ打ち消して、
+          見た目の左右の余白を揃える */}
       {/* biome-ignore lint/performance/noImgElement: next/image is not available in ImageResponse */}
-      <img alt="" height={280} src={iconSrc} width={280} />
+      <img alt="" height={280} src={iconSrc} style={{ marginRight: -43 }} width={280} />
     </div>,
     {
       ...size,
