@@ -10,10 +10,10 @@ jobs:
   extension:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
         with:
-          node-version: 22.23.2
+          node-version: 24.21.0
       # 自前配布で update_url を持つため --self-hosted が要る。外すと
       # MANIFEST_UPDATE_URL のエラーになる。
       - run: npx --yes web-ext@8 lint --source-dir . --self-hosted
@@ -22,13 +22,13 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
         with:
-          version: 11
-      - uses: actions/setup-node@v4
+          version: 12.13.0
+      - uses: actions/setup-node@v7
         with:
-          node-version: 22.23.2
+          node-version: 24.21.0
           cache: pnpm
           cache-dependency-path: pnpm-lock.yaml
       - run: pnpm install --frozen-lockfile
@@ -41,13 +41,13 @@ jobs:
       run:
         working-directory: lp
     steps:
-      - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
         with:
-          version: 11
-      - uses: actions/setup-node@v4
+          version: 12.13.0
+      - uses: actions/setup-node@v7
         with:
-          node-version: 22.23.2
+          node-version: 24.21.0
           cache: pnpm
           cache-dependency-path: lp/pnpm-lock.yaml
       - run: pnpm install --frozen-lockfile
