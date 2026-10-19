@@ -13,7 +13,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 22.23.2
+          node-version: 22.23.3
       # 自前配布で update_url を持つため --self-hosted が要る。外すと
       # MANIFEST_UPDATE_URL のエラーになる。
       - run: npx --yes web-ext@8 lint --source-dir . --self-hosted
@@ -28,7 +28,7 @@ jobs:
           version: 11
       - uses: actions/setup-node@v4
         with:
-          node-version: 22.23.2
+          node-version: 22.23.3
           cache: pnpm
           cache-dependency-path: pnpm-lock.yaml
       - run: pnpm install --frozen-lockfile
@@ -47,7 +47,7 @@ jobs:
           version: 11
       - uses: actions/setup-node@v4
         with:
-          node-version: 22.23.2
+          node-version: 22.23.3
           cache: pnpm
           cache-dependency-path: lp/pnpm-lock.yaml
       - run: pnpm install --frozen-lockfile
