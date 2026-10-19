@@ -6,7 +6,7 @@
     "test": "node --test \"test/*.test.js\""
   },
   "devDependencies": {
-    "jsdom": "^30.1.1"
+    "jsdom": "^30.1.3"
   },
   "webExt": {
     "ignoreFiles": ["lp", "test", "package.json", "pnpm-lock.yaml"]
